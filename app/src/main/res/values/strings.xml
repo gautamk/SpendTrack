@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SpendTrack</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="amount">Amount</string>
+    <string name="note_optional">Note (optional)</string>
+    <string name="date">Date</string>
+    <string name="tag">Tag</string>
+    <string name="add_spend">Add Spend</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+
+</resources>

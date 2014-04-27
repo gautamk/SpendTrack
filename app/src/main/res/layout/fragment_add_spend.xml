@@ -1,0 +1,55 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gautamk.spendtrack.app.AddSpendFragement">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:hint="@string/amount"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/note"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:hint="@string/note_optional"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow style="?android:attr/buttonBarStyle">
+
+            <Button
+                android:id="@+id/date"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="@string/date"
+                />
+
+            <AutoCompleteTextView
+                android:id="@+id/tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:hint="@string/tag" />
+        </TableRow>
+
+    </TableLayout>
+
+
+</ScrollView>
