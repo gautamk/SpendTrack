@@ -1,15 +1,14 @@
 package com.gautamk.spendtrack.app.adapters;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import com.gautamk.spendtrack.app.R;
 import com.gautamk.spendtrack.app.managers.SpendManager;
+import com.gautamk.spendtrack.app.views.HumanizingDateView;
 
 import java.util.List;
 
@@ -35,12 +34,12 @@ public class SpendListAdapter extends ArrayAdapter<SpendManager.Spend> {
         public final TextView
                 amount,
                 note,
-                date,
                 tag;
+        HumanizingDateView date;
 
         public ViewHolder(View container) {
             tag = (TextView) container.findViewById(R.id.tag);
-            date = (TextView) container.findViewById(R.id.date);
+            date = (HumanizingDateView) container.findViewById(R.id.date);
             note = (TextView) container.findViewById(R.id.note);
             amount = (TextView) container.findViewById(R.id.amount);
         }
@@ -48,10 +47,10 @@ public class SpendListAdapter extends ArrayAdapter<SpendManager.Spend> {
 
     private void setViewAtPosition(int position, ViewHolder holder) {
         SpendManager.Spend spend = objects.get(position);
-        holder.amount.setText("" + spend.amount);
-        holder.tag.setText(spend.tag);
-        holder.date.setText(spend.date.toString());
-        holder.note.setText(spend.note);
+        holder.amount.setText("" + spend.getAmount());
+        holder.tag.setText(spend.getTag());
+        holder.date.setDate(spend.getDate());
+        holder.note.setText(spend.getNote());
     }
 
 

@@ -9,7 +9,10 @@ buildscript {
 apply plugin: 'android'
 
 repositories {
-        mavenCentral()
+    mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 android {
@@ -40,5 +43,7 @@ dependencies {
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     // The Support Repository (separate from the corresponding library) can be found in the Extras category.
     // compile 'com.android.support:support-v4:19.+'
+    compile 'joda-time:joda-time:2.3',
+            'org.ocpsoft.prettytime:prettytime:3.2.4-SNAPSHOT'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

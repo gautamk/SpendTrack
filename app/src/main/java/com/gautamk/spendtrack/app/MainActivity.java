@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.gautamk.spendtrack.app.adapters.SpendListAdapter;
 import com.gautamk.spendtrack.app.managers.SpendManager;
@@ -37,6 +38,10 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
 
     protected void showAddSpendFragment() {
         replaceFragment(R.id.container, new AddSpendFragement());
+    }
+
+    protected void showUpdateSpendFragment(SpendManager.Spend spend) {
+        replaceFragment(R.id.container, new AddSpendFragement(spend));
     }
 
     @Override
@@ -76,7 +81,7 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class ListSpendsFragment extends Fragment {
+    public class ListSpendsFragment extends Fragment {
         ListView spendList;
 
         public ListSpendsFragment() {
@@ -87,12 +92,29 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             this.spendList = (ListView) rootView.findViewById(R.id.spend_list);
-            List<SpendManager.Spend> spends = SpendManager.list();
-            SpendListAdapter spendListAdapter = new SpendListAdapter(getActivity(), R.id.spend_list, spends);
+            final List<SpendManager.Spend> spends = SpendManager.list();
+            final SpendListAdapter spendListAdapter = new SpendListAdapter(getActivity(), R.id.spend_list, spends);
             spendList.setAdapter(spendListAdapter);
+            spendList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    SpendManager.Spend spend = spends.get(position);
+                    SpendManager.delete(spend);
+                    spends.clear();
+                    spends.addAll(SpendManager.list());
+                    spendListAdapter.notifyDataSetChanged();
+                    return true;
+                }
+            });
+            spendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    SpendManager.Spend spend = spends.get(position);
+                    showUpdateSpendFragment(spend);
+                }
+            });
             return rootView;
         }
-
 
     }
 }

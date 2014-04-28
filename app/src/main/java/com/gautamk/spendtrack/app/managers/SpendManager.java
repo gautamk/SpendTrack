@@ -2,6 +2,7 @@ package com.gautamk.spendtrack.app.managers;
 
 import android.content.Context;
 import com.orm.SugarRecord;
+import com.orm.query.Select;
 
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,8 @@ public class SpendManager {
     }
 
     public static List<Spend> list() {
-        return Spend.listAll(Spend.class);
+        List<Spend> spends = (List<Spend>) Select.from(Spend.class).orderBy("date").list();
+        return spends;
     }
 
     public static void delete(Spend spend) {
@@ -31,15 +33,15 @@ public class SpendManager {
     }
 
     public static final class Spend extends SugarRecord<Spend> {
-        public float amount;
-        public String note, tag;
-        public Date date;
+        private float amount;
+        private String note, tag;
+        private long date;
 
         public Spend(Context context) {
             super(context);
-            this.date = new Date();
-            this.amount = 0;
             this.note = this.tag = "";
+            this.amount = 0f;
+            this.date = new Date().getTime();
         }
 
         public Spend(Context context, float amount, String note, String tag, Date date) {
@@ -47,7 +49,39 @@ public class SpendManager {
             this.amount = amount;
             this.note = note;
             this.tag = tag;
-            this.date = date;
+            this.date = date.getTime();
+        }
+
+        public float getAmount() {
+            return amount;
+        }
+
+        public void setAmount(float amount) {
+            this.amount = amount;
+        }
+
+        public String getNote() {
+            return note;
+        }
+
+        public void setNote(String note) {
+            this.note = note;
+        }
+
+        public String getTag() {
+            return tag;
+        }
+
+        public void setTag(String tag) {
+            this.tag = tag;
+        }
+
+        public Date getDate() {
+            return new Date(this.date);
+        }
+
+        public void setDate(Date date) {
+            this.date = date.getTime();
         }
     }
 }

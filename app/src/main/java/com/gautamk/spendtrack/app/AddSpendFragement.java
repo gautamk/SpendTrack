@@ -1,7 +1,6 @@
 package com.gautamk.spendtrack.app;
 
 import android.app.*;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
@@ -25,9 +24,15 @@ public class AddSpendFragement extends Fragment {
     private Button dateButton;
     private AutoCompleteTextView tag;
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SpendManager.Spend spend = null;
 
     public AddSpendFragement() {
         setHasOptionsMenu(true);
+    }
+
+    public AddSpendFragement(SpendManager.Spend spend) {
+        this();
+        this.spend = spend;
     }
 
     @Override
@@ -43,7 +48,10 @@ public class AddSpendFragement extends Fragment {
         String note = this.note.getText().toString();
         String tag = this.tag.getText().toString();
         Date date = (Date) this.dateButton.getTag();
-        SpendManager.Spend spend = new SpendManager.Spend(getActivity(), amount, note, tag, date);
+        spend.setAmount(amount);
+        spend.setTag(tag);
+        spend.setDate(date);
+        spend.setNote(note);
         SpendManager.add(spend);
     }
 
@@ -63,17 +71,27 @@ public class AddSpendFragement extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (this.spend == null) {
+            this.spend = new SpendManager.Spend(getActivity());
+        }
         View fragmentView = inflater.inflate(R.layout.fragment_add_spend, container, false);
         this.amount = (EditText) fragmentView.findViewById(R.id.amount);
+        this.amount.setText("" + this.spend.getAmount());
+
         this.note = (EditText) fragmentView.findViewById(R.id.note);
+        this.note.setText(spend.getNote());
+
         this.dateButton = (Button) fragmentView.findViewById(R.id.date);
-        this.tag = (AutoCompleteTextView) fragmentView.findViewById(R.id.tag);
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDatePickerDialog();
             }
         });
+        dateButton.setText(dateFormat.format(spend.getDate()));
+        dateButton.setTag(spend.getDate());
+        this.tag = (AutoCompleteTextView) fragmentView.findViewById(R.id.tag);
+        this.tag.setText(spend.getTag());
         return fragmentView;
     }
 
@@ -157,8 +175,8 @@ public class AddSpendFragement extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         Activity activity = getActivity();
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         try {
@@ -167,4 +185,5 @@ public class AddSpendFragement extends Fragment {
 
         }
     }
+
 }
