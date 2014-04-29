@@ -12,5 +12,6 @@
     <string name="add_spend">Add Spend</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
+    <string name="import_csv">Import from CSV</string>
 
 </resources>

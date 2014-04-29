@@ -3,6 +3,7 @@ package com.gautamk.spendtrack.app;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import com.gautamk.spendtrack.app.adapters.SpendListAdapter;
 import com.gautamk.spendtrack.app.managers.SpendManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -63,6 +65,7 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
                 this.showAddSpendFragment();
                 return true;
             case R.id.action_settings:
+                this.replaceFragment(R.id.container, new SettingsFragment());
                 return true;
         }
 
@@ -81,40 +84,44 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
     /**
      * A placeholder fragment containing a simple view.
      */
-    public class ListSpendsFragment extends Fragment {
-        ListView spendList;
+    public class ListSpendsFragment extends ListFragment implements AdapterView.OnItemLongClickListener {
 
         public ListSpendsFragment() {
         }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            this.spendList = (ListView) rootView.findViewById(R.id.spend_list);
-            final List<SpendManager.Spend> spends = SpendManager.list();
-            final SpendListAdapter spendListAdapter = new SpendListAdapter(getActivity(), R.id.spend_list, spends);
-            spendList.setAdapter(spendListAdapter);
-            spendList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    SpendManager.Spend spend = spends.get(position);
-                    SpendManager.delete(spend);
-                    spends.clear();
-                    spends.addAll(SpendManager.list());
-                    spendListAdapter.notifyDataSetChanged();
-                    return true;
-                }
-            });
-            spendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    SpendManager.Spend spend = spends.get(position);
-                    showUpdateSpendFragment(spend);
-                }
-            });
-            return rootView;
+        final List<SpendManager.Spend> spends = new ArrayList<SpendManager.Spend>();
+        SpendListAdapter spendListAdapter;
+
+        private void updateSpends() {
+            this.spends.clear();
+            spends.addAll(SpendManager.list());
         }
 
+
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            spendListAdapter = new SpendListAdapter(getActivity(), R.layout.fragment_list_spends, spends);
+            setListAdapter(spendListAdapter);
+            updateSpends();
+            getListView().setOnItemLongClickListener(this);
+        }
+
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            super.onListItemClick(l, v, position, id);
+            SpendManager.Spend spend = spends.get(position);
+            showUpdateSpendFragment(spend);
+        }
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+            SpendManager.Spend spend = spends.get(position);
+            SpendManager.delete(spend);
+            spends.clear();
+            spends.addAll(SpendManager.list());
+            spendListAdapter.notifyDataSetChanged();
+            return true;
+        }
     }
 }

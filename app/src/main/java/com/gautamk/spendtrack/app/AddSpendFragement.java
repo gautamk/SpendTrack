@@ -120,7 +120,16 @@ public class AddSpendFragement extends Fragment {
     }
 
     public void showDatePickerDialog() {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = new DatePickerFragment(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, day);
+                Date date = calendar.getTime();
+                dateButton.setTag(date);
+                dateButton.setText(dateFormat.format(date));
+            }
+        }, (Date) dateButton.getTag());
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
@@ -140,38 +149,6 @@ public class AddSpendFragement extends Fragment {
 
 
         public void closeSpend();
-    }
-
-    private class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar c = Calendar.getInstance();
-            Date date = (Date) dateButton.getTag();
-            if (date != null) {
-                c.setTime(date);
-            }
-            // Use the current date as the default date in the picker
-
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month, day);
-            Date date = calendar.getTime();
-            dateButton.setTag(date);
-            dateButton.setText(dateFormat.format(date));
-        }
-
-
     }
 
     @Override
