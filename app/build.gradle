@@ -44,6 +44,7 @@ dependencies {
     // The Support Repository (separate from the corresponding library) can be found in the Extras category.
     // compile 'com.android.support:support-v4:19.+'
     compile 'joda-time:joda-time:2.3',
-            'org.ocpsoft.prettytime:prettytime:3.2.4-SNAPSHOT'
+            'org.ocpsoft.prettytime:prettytime:3.2.4-SNAPSHOT',
+            'net.sf.opencsv:opencsv:2.3'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

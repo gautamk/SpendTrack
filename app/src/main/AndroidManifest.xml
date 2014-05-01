@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gautamk.spendtrack.app">
+<manifest
+    package="com.gautamk.spendtrack.app"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
 
         <activity
             android:name="com.gautamk.spendtrack.app.MainActivity"
@@ -32,6 +33,11 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.gautamk.spendtrack.app" />
+
+        <activity
+            android:name=".ImportActivity"
+            android:label="@string/title_activity_import_csv"></activity>
+
     </application>
 
 </manifest>

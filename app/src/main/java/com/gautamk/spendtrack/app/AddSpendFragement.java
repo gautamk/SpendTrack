@@ -5,16 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.*;
 import com.gautamk.spendtrack.app.managers.SpendManager;
+import com.orm.query.Select;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AddSpendFragement extends Fragment {
 
@@ -90,8 +90,18 @@ public class AddSpendFragement extends Fragment {
         });
         dateButton.setText(dateFormat.format(spend.getDate()));
         dateButton.setTag(spend.getDate());
+
         this.tag = (AutoCompleteTextView) fragmentView.findViewById(R.id.tag);
         this.tag.setText(spend.getTag());
+        List<SpendManager.Spend> spendTags = SpendManager.Spend.find(SpendManager.Spend.class,null,null,"TAG",null,null);
+        List<String> tags = new ArrayList<>(spendTags.size());
+        for (SpendManager.Spend spend : spendTags) {
+            tags.add(spend.getTag());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, tags);
+        this.tag.setAdapter(adapter);
+        this.tag.setThreshold(0);
+
         return fragmentView;
     }
 

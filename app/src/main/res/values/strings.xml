@@ -13,5 +13,7 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="import_csv">Import from CSV</string>
+    <string name="title_activity_import_csv">ImportCSV</string>
+    <string name="import_string">Import</string>
 
 </resources>

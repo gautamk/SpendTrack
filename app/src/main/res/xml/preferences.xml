@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:title="@string/import_csv">
+    <Preference android:title="@string/import_string">
         <intent
-            android:targetClass="com.gautamk.spendtrack.app.MainActivity"
+            android:targetClass="com.gautamk.spendtrack.app.ImportActivity"
             android:targetPackage="com.gautamk.spendtrack.app" />
     </Preference>
 

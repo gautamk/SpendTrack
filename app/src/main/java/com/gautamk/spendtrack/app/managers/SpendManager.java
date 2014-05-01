@@ -20,7 +20,7 @@ public class SpendManager {
     }
 
     public static List<Spend> list() {
-        List<Spend> spends = (List<Spend>) Select.from(Spend.class).orderBy("date").list();
+        List<Spend> spends = (List<Spend>) Select.from(Spend.class).orderBy("date desc").list();
         return spends;
     }
 
