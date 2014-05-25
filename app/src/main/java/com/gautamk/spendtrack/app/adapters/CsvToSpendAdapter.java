@@ -4,7 +4,6 @@ import android.content.Context;
 import au.com.bytecode.opencsv.CSVReader;
 import com.gautamk.spendtrack.app.managers.SpendManager;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;

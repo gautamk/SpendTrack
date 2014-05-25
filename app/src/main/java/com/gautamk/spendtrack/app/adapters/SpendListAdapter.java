@@ -30,21 +30,6 @@ public class SpendListAdapter extends ArrayAdapter<SpendManager.Spend> {
         this.mInflater = LayoutInflater.from(context);
     }
 
-    static class ViewHolder {
-        public final TextView
-                amount,
-                note,
-                tag;
-        HumanizingDateView date;
-
-        public ViewHolder(View container) {
-            tag = (TextView) container.findViewById(R.id.tag);
-            date = (HumanizingDateView) container.findViewById(R.id.date);
-            note = (TextView) container.findViewById(R.id.note);
-            amount = (TextView) container.findViewById(R.id.amount);
-        }
-    }
-
     private void setViewAtPosition(int position, ViewHolder holder) {
         SpendManager.Spend spend = objects.get(position);
         holder.amount.setText("" + spend.getAmount());
@@ -52,7 +37,6 @@ public class SpendListAdapter extends ArrayAdapter<SpendManager.Spend> {
         holder.date.setDate(spend.getDate());
         holder.note.setText(spend.getNote());
     }
-
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -66,5 +50,20 @@ public class SpendListAdapter extends ArrayAdapter<SpendManager.Spend> {
         }
         setViewAtPosition(position, holder);
         return convertView;
+    }
+
+    static class ViewHolder {
+        public final TextView
+                amount,
+                note,
+                tag;
+        HumanizingDateView date;
+
+        public ViewHolder(View container) {
+            tag = (TextView) container.findViewById(R.id.tag);
+            date = (HumanizingDateView) container.findViewById(R.id.date);
+            note = (TextView) container.findViewById(R.id.note);
+            amount = (TextView) container.findViewById(R.id.amount);
+        }
     }
 }

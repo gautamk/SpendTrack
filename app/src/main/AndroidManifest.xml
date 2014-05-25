@@ -4,6 +4,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <permission
+        android:name="android.permission.STATUS_BAR_SERVICE"
+        android:protectionLevel="signature" />
+
     <application
         android:name="com.orm.SugarApp"
         android:allowBackup="true"
@@ -36,7 +40,8 @@
 
         <activity
             android:name=".ImportActivity"
-            android:label="@string/title_activity_import_csv"></activity>
+            android:label="@string/title_activity_import_csv" />
+
 
     </application>
 

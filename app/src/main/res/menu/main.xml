@@ -9,7 +9,7 @@
         android:title="@string/action_settings" />
     <item
         android:id="@+id/add_spend"
-        android:title="@string/add_spend"
         android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="always" />
+        android:showAsAction="always"
+        android:title="@string/add_spend" />
 </menu>

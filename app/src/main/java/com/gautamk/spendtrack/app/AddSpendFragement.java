@@ -1,13 +1,15 @@
 package com.gautamk.spendtrack.app;
 
-import android.app.*;
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.gautamk.spendtrack.app.managers.SpendManager;
-import com.orm.query.Select;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,12 +20,12 @@ import java.util.List;
 
 public class AddSpendFragement extends Fragment {
 
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private OnSpentFragmentInteractionListener mListener;
     private EditText amount;
     private EditText note;
     private Button dateButton;
     private AutoCompleteTextView tag;
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private SpendManager.Spend spend = null;
 
     public AddSpendFragement() {
@@ -93,7 +95,7 @@ public class AddSpendFragement extends Fragment {
 
         this.tag = (AutoCompleteTextView) fragmentView.findViewById(R.id.tag);
         this.tag.setText(spend.getTag());
-        List<SpendManager.Spend> spendTags = SpendManager.Spend.find(SpendManager.Spend.class,null,null,"TAG",null,null);
+        List<SpendManager.Spend> spendTags = SpendManager.Spend.find(SpendManager.Spend.class, null, null, "TAG", null, null);
         List<String> tags = new ArrayList<>(spendTags.size());
         for (SpendManager.Spend spend : spendTags) {
             tags.add(spend.getTag());
@@ -143,6 +145,18 @@ public class AddSpendFragement extends Fragment {
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Activity activity = getActivity();
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        try {
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -159,18 +173,6 @@ public class AddSpendFragement extends Fragment {
 
 
         public void closeSpend();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Activity activity = getActivity();
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        try {
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-        } catch (Exception e) {
-
-        }
     }
 
 }

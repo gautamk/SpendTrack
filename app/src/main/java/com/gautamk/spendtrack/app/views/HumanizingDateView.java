@@ -1,7 +1,6 @@
 package com.gautamk.spendtrack.app.views;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import org.ocpsoft.prettytime.PrettyTime;
@@ -27,11 +26,6 @@ public class HumanizingDateView extends TextView {
         super(context, attrs, defStyle);
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-        this.setDateAsText();
-    }
-
     private void setDateAsText() {
         if (date == null) {
             this.setText("No date set");
@@ -40,9 +34,13 @@ public class HumanizingDateView extends TextView {
         }
     }
 
-
     public Date getDate() {
         return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+        this.setDateAsText();
     }
 
 }

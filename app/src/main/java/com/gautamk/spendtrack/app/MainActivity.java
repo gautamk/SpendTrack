@@ -6,7 +6,9 @@ import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.gautamk.spendtrack.app.adapters.SpendListAdapter;
@@ -86,11 +88,12 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
      */
     public class ListSpendsFragment extends ListFragment implements AdapterView.OnItemLongClickListener {
 
-        public ListSpendsFragment() {
-        }
-
         final List<SpendManager.Spend> spends = new ArrayList<SpendManager.Spend>();
         SpendListAdapter spendListAdapter;
+
+        public ListSpendsFragment() {
+            super();
+        }
 
         private void updateSpends() {
             this.spends.clear();
