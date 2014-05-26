@@ -1,3 +1,5 @@
+import groovy.swing.SwingBuilder
+
 buildscript {
     repositories {
         mavenCentral()
@@ -14,6 +16,7 @@ repositories {
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
 }
+
 
 android {
     compileSdkVersion 19
@@ -36,15 +39,71 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    signingConfigs {
+        release {
+            storeFile file("release.keystore")
+            storePassword ""
+            keyAlias "spend_track"
+            keyPassword ""
+        }
+
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    dependencies {
+
+        // You must install or update the Support Repository through the SDK manager to use this dependency.
+        // The Support Repository (separate from the corresponding library) can be found in the Extras category.
+        // compile 'com.android.support:support-v4:19.+'
+        compile 'joda-time:joda-time:2.3',
+                'org.ocpsoft.prettytime:prettytime:3.2.4-SNAPSHOT',
+                'net.sf.opencsv:opencsv:2.3'
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+    }
+
 }
 
-dependencies {
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.hasTask(':app:assembleRelease')) {
 
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // The Support Repository (separate from the corresponding library) can be found in the Extras category.
-    // compile 'com.android.support:support-v4:19.+'
-    compile 'joda-time:joda-time:2.3',
-            'org.ocpsoft.prettytime:prettytime:3.2.4-SNAPSHOT',
-            'net.sf.opencsv:opencsv:2.3'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-}
+        def pass = ''
+        if (System.console() == null) {
+            new SwingBuilder().edt {
+                dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
+                        title: 'Enter password', // Dialog title
+                        alwaysOnTop: true, // pretty much what the name says
+                        resizable: false, // Don't allow the user to resize the dialog
+                        locationRelativeTo: null, // Place dialog in center of the screen
+                        pack: true, // We need to pack the dialog (so it will take the size of it's children)
+                        show: true // Let's show it
+                ) {
+                    vbox { // Put everything below each other
+                        label(text: "Please enter key passphrase:")
+                        input = passwordField()
+                        button(defaultButton: true, text: 'OK', actionPerformed: {
+                            pass = input.password; // Set pass variable to value of input field
+                            dispose(); // Close dialog
+                        })
+                    } // vbox end
+                } // dialog end
+            } // edt end
+        } else {
+            pass = System.console().readPassword("\nPlease enter key passphrase: ")
+            pass = new String(pass)
+        }
+
+        if (pass.size() <= 0) {
+            throw new InvalidUserDataException("You must enter a password to proceed.")
+        }
+
+        // -----
+        // Do what you need to do with pass here!
+        // -----
+        android.signingConfigs.release.storePassword = pass
+        android.signingConfigs.release.keyPassword = pass
+    } // end if has task
+} // end whenReady

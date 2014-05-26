@@ -77,7 +77,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 startActivity(Intent.createChooser(intent, "Export CSV"));
                             }
                         }
-                    }).execute();
+                    }).execute(csv.getAbsolutePath());
 
                 }
                 return true;

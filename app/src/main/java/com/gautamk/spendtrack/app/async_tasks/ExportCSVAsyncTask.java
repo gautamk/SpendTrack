@@ -28,7 +28,8 @@ public class ExportCSVAsyncTask extends NotificationAsyncTask<String, Integer, B
     @Override
     protected void onPreExecute() {
         mBuilder.setSmallIcon(android.R.drawable.ic_menu_upload)
-                .setProgress(0, 0, true);
+                .setProgress(0, 0, true)
+                .setContentTitle("Export CSV");
         super.onPreExecute();
     }
 
@@ -55,6 +56,7 @@ public class ExportCSVAsyncTask extends NotificationAsyncTask<String, Integer, B
             BufferedWriter bufferedWriter;
             try {
                 bufferedWriter = new BufferedWriter(new FileWriter(path));
+                bufferedWriter.write("Date,Amount,Note,Tag\n");
             } catch (IOException e) {
                 e.printStackTrace();
                 continue;
@@ -76,6 +78,12 @@ public class ExportCSVAsyncTask extends NotificationAsyncTask<String, Integer, B
                 for (SpendManager.Spend spend : spends) {
                     publishProgress(spends.size(), ++index);
                     SpendToCsvAdapter.writeSpendToCSV(spend, writer);
+                }
+                try {
+                    writer.flush();
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             return true;

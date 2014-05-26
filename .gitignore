@@ -82,3 +82,4 @@ proguard/
 .gradle
 build/
 
+release.keystore

@@ -32,10 +32,10 @@ public class AddSpendFragement extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    public AddSpendFragement(SpendManager.Spend spend) {
-        this();
+    public void initialize(SpendManager.Spend spend) {
         this.spend = spend;
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

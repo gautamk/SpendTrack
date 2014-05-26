@@ -40,7 +40,9 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
     }
 
     protected void showUpdateSpendFragment(SpendManager.Spend spend) {
-        replaceFragment(R.id.container, new AddSpendFragement(spend));
+        AddSpendFragement addSpendFragement = new AddSpendFragement();
+        addSpendFragement.initialize(spend);
+        replaceFragment(R.id.container, addSpendFragement);
     }
 
     @Override
