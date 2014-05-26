@@ -15,7 +15,7 @@ import java.util.List;
  * Created by gautam on 1/5/14.
  */
 public class CsvToSpendAdapter {
-
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private static String resiliantGetFromArray(String[] array, int index, String defaultValue) {
         try {
             return array[index];
@@ -30,7 +30,7 @@ public class CsvToSpendAdapter {
 
     public static List<SpendManager.Spend> adapt(Context context, String path, char separator, int skipLines) throws IOException, ParseException {
         CSVReader reader = new CSVReader(new FileReader(path), separator, '\'', skipLines);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
         String[] nextLine;
         ArrayList<SpendManager.Spend> spends = new ArrayList<>();
         while ((nextLine = reader.readNext()) != null) {

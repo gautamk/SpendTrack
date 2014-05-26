@@ -3,23 +3,18 @@ package com.gautamk.spendtrack.app;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import com.gautamk.spendtrack.app.adapters.SpendListAdapter;
+import android.widget.Toast;
+import com.gautamk.spendtrack.app.async_tasks.ImportFromCSVAsyncTask;
 import com.gautamk.spendtrack.app.managers.SpendManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends Activity implements AddSpendFragement.OnSpentFragmentInteractionListener {
-    private final Fragment defaultFragment = new ListSpendsFragment();
+    private final Fragment defaultFragment = new ListSpendsFragment(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,48 +78,18 @@ public class MainActivity extends Activity implements AddSpendFragement.OnSpentF
         replaceFragment(R.id.container, defaultFragment);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public class ListSpendsFragment extends ListFragment implements AdapterView.OnItemLongClickListener {
-
-        final List<SpendManager.Spend> spends = new ArrayList<SpendManager.Spend>();
-        SpendListAdapter spendListAdapter;
-
-        public ListSpendsFragment() {
-            super();
-        }
-
-        private void updateSpends() {
-            this.spends.clear();
-            spends.addAll(SpendManager.list());
-        }
-
-
-        @Override
-        public void onViewCreated(View view, Bundle savedInstanceState) {
-            super.onViewCreated(view, savedInstanceState);
-            spendListAdapter = new SpendListAdapter(getActivity(), R.layout.fragment_list_spends, spends);
-            setListAdapter(spendListAdapter);
-            updateSpends();
-            getListView().setOnItemLongClickListener(this);
-        }
-
-        @Override
-        public void onListItemClick(ListView l, View v, int position, long id) {
-            super.onListItemClick(l, v, position, id);
-            SpendManager.Spend spend = spends.get(position);
-            showUpdateSpendFragment(spend);
-        }
-
-        @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-            SpendManager.Spend spend = spends.get(position);
-            SpendManager.delete(spend);
-            spends.clear();
-            spends.addAll(SpendManager.list());
-            spendListAdapter.notifyDataSetChanged();
-            return true;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) return;
+        switch (requestCode) {
+            case SettingsFragment.PICKFILE_RESULT_CODE:
+                if (resultCode == RESULT_OK) {
+                    String path = data.getData().getPath();
+                    Toast.makeText(this, path, Toast.LENGTH_LONG).show();
+                    ImportFromCSVAsyncTask importFromCSVAsyncTask = new ImportFromCSVAsyncTask(this);
+                    importFromCSVAsyncTask.execute(path);
+                }
+                break;
         }
     }
 }

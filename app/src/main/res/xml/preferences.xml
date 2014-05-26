@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:title="@string/import_string">
-        <intent
-            android:targetClass="com.gautamk.spendtrack.app.ImportActivity"
-            android:targetPackage="com.gautamk.spendtrack.app" />
-    </Preference>
+    <Preference
+        android:key="import_csv"
+        android:summary="Import Spends from CSV"
+        android:title="@string/import_csv" />
+    <Preference
+        android:key="export_csv"
+        android:summary="Export CSV"
+        android:title="@string/export_csv" />
     <Preference
         android:key="clear_spends"
         android:summary="Delete all Spends"

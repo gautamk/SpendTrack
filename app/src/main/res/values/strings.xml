@@ -16,5 +16,6 @@
     <string name="title_activity_import_csv">ImportCSV</string>
     <string name="import_string">Import</string>
     <string name="clear_spends">Clear Spends</string>
+    <string name="export_csv">Export Csv</string>
 
 </resources>
