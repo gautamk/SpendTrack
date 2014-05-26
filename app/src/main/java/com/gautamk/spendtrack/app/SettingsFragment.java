@@ -10,11 +10,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import com.gautamk.spendtrack.app.adapters.SpendToCsvAdapter;
 import com.gautamk.spendtrack.app.async_tasks.ClearSpendsAsyncTask;
+import com.gautamk.spendtrack.app.async_tasks.ExportCSVAsyncTask;
 
 import java.io.File;
-import java.io.IOException;
 
 
 public class SettingsFragment extends PreferenceFragment {
@@ -67,18 +66,19 @@ public class SettingsFragment extends PreferenceFragment {
                 Activity activity = getActivity();
                 if (activity != null) {
                     File outputDir = Environment.getExternalStorageDirectory();
-                    File csv = null;
-                    try {
-                        // Make sure the Pictures directory exists.
-                        csv = new File(outputDir, "spend-track-export.csv");
-                        SpendToCsvAdapter.adapt(csv.getAbsolutePath());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/csv");
-                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(csv));
-                    startActivity(Intent.createChooser(intent, "Export CSV"));
+                    final File csv = new File(outputDir, "spend-track-export.csv");
+                    new ExportCSVAsyncTask(activity, new ExportCSVAsyncTask.PostExecuteCallBack() {
+                        @Override
+                        public void postExecute(Boolean success) {
+                            if (success) {
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setType("text/csv");
+                                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(csv));
+                                startActivity(Intent.createChooser(intent, "Export CSV"));
+                            }
+                        }
+                    }).execute();
+
                 }
                 return true;
             }

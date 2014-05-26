@@ -6,6 +6,7 @@ import com.gautamk.spendtrack.app.managers.SpendManager;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -25,14 +26,18 @@ public class SpendToCsvAdapter {
         });
     }
 
+    public static CSVWriter buildCSVWriter(Writer writer) {
+        return new CSVWriter(writer, ';', '\'');
+    }
+
     public static void adapt(String path) throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
-        CSVWriter csvWriter = new CSVWriter(bufferedWriter,';','\'');
+        CSVWriter csvWriter = buildCSVWriter(bufferedWriter);
         try {
             bufferedWriter.write("Date,Amount,Note,Tag\n");
             List<SpendManager.Spend> spends = SpendManager.list();
             for (SpendManager.Spend spend : spends) {
-                writeSpendToCSV(spend,csvWriter);
+                writeSpendToCSV(spend, csvWriter);
             }
         } finally {
             csvWriter.close();
