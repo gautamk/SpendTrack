@@ -83,3 +83,4 @@ proguard/
 build/
 
 release.keystore
+*.db
